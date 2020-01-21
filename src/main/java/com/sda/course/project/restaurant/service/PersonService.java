@@ -2,11 +2,15 @@ package com.sda.course.project.restaurant.service;
 
 import com.sda.course.project.restaurant.entity.PersonEntity;
 import com.sda.course.project.restaurant.repository.PersonRepository;
-import org.springframework.beans.BeanUtils;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PersonService {
@@ -31,7 +35,6 @@ public class PersonService {
 
     // return optional of PersonEntity
     public PersonEntity getById(Integer id) {
-        System.out.println(id);
         return personRepository.findById(id).orElse(null);
     }
 
@@ -39,19 +42,37 @@ public class PersonService {
         return personRepository.findByRolesName(role);
     }
 
-    public PersonEntity updatePersonPartially(Integer id, PersonEntity newPerson) {
-        return personRepository
-                .findById(id)
-                .map(person -> {
-                    BeanUtils.copyProperties(newPerson, person);
-                    return personRepository.save(person);
-                }).orElseGet(() -> {
-                    newPerson.setId(id);
-                    return personRepository.save(newPerson);
-                });
+    public PersonEntity updatePerson(Integer id, PersonEntity updatedPerson) {
+
+        return personRepository.findById(id).map(
+                p -> {
+                    p.setFirstName(updatedPerson.getFirstName());
+                    p.setLastName(updatedPerson.getLastName());
+                    p.setEmail(updatedPerson.getEmail());
+                    p.setPhone(updatedPerson.getPhone());
+                    p.setRoles(updatedPerson.getRoles());
+
+                    return personRepository.save(p);
+                }
+        ).orElseGet(() -> {
+            updatedPerson.setId(id);
+            return personRepository.save(updatedPerson);
+        });
+    }
+
+    public PersonEntity updatePersonPartially(Integer id, Map<String, Object> updates) {
+        PersonEntity personToUpdate = personRepository.findById(id).orElse(null);
+
+        updates.forEach((k, v) -> {
+            Field field = ReflectionUtils.findRequiredField(PersonEntity.class, k);
+            ReflectionUtils.setField(field, personToUpdate, v);
+        });
+
+        return personRepository.save(personToUpdate);
     }
 
     public void deletePersonById(Integer id) {
+        PersonEntity personToDelete = personRepository.findById(id).orElse(null);
         personRepository.deleteById(id);
     }
 

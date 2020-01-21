@@ -4,8 +4,10 @@ package com.sda.course.project.restaurant.controllers;
 import com.sda.course.project.restaurant.entity.OrderEntity;
 import com.sda.course.project.restaurant.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class OrderController {
     // custom exceptions with exception handlers from Spring
     @PostMapping
     public @ResponseBody
-    OrderEntity placeOrder(@RequestBody @NotNull OrderEntity newOrder) {
+    OrderEntity placeOrder(@RequestBody @Valid OrderEntity newOrder) {
         return orderService.addOrder(newOrder);
     }
 

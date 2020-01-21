@@ -6,11 +6,17 @@ import com.sda.course.project.restaurant.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Map;
 
 @RestController
+@Validated
 @RequestMapping(value = "/persons")
 public class PersonController {
 
@@ -25,13 +31,13 @@ public class PersonController {
 
     @GetMapping(value = "/{id}")
     public @ResponseBody
-    PersonEntity getPersonById(@PathVariable Integer id) {
+    PersonEntity getPersonById(@PathVariable @Min(1) Integer id) {
         return personService.getById(id);
     }
 
     @GetMapping(value = "/email/{email}")
     public @ResponseBody
-    PersonEntity getPersonById(@PathVariable String email) {
+    PersonEntity getPersonByEmail(@PathVariable String email) {
         return personService.getByEmail(email);
     }
 
@@ -49,24 +55,30 @@ public class PersonController {
 
     @GetMapping(value = "/customers/{customerId}")
     public @ResponseBody
-    PersonEntity getCustomerDetails(@PathVariable Integer customerId) {
+    PersonEntity getCustomerDetails(@PathVariable @Min(1) Integer customerId) {
         return personService.getById(customerId);
     }
 
     @PostMapping
     public @ResponseBody
-    PersonEntity createPerson(@RequestBody PersonEntity newPerson) {
+    PersonEntity createPerson(@Valid @RequestBody PersonEntity newPerson) {
         return personService.createPerson(newPerson);
     }
 
     @PutMapping(value = "/{id}")
     public @ResponseBody
-    PersonEntity updatePerson(@PathVariable Integer id, @RequestBody PersonEntity updatedPerson) {
-        return personService.updatePersonPartially(id, updatedPerson);
+    PersonEntity updatePerson(@PathVariable @Min(1) Integer id, @Valid PersonEntity updatedPerson) {
+        return personService.updatePerson(id, updatedPerson);
+    }
+
+    @PatchMapping(value = "/{id}")
+    public @ResponseBody
+    PersonEntity updatePersonPartially(@PathVariable @Min(1) Integer id, @RequestBody @Valid Map<String, Object> updates) {
+        return personService.updatePersonPartially(id, updates);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity deletePersonById(@PathVariable Integer id) {
+    public ResponseEntity deletePersonById(@PathVariable @Min(1) Integer id) {
         personService.deletePersonById(id);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
@@ -74,5 +86,12 @@ public class PersonController {
     @DeleteMapping
     public void deletePersonByEmail(@RequestParam String email) {
         personService.deletePersonByEmail(email);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    String handleConstraintViolationException(ConstraintViolationException e){
+        return "Not valid due to validation error: " + e.getMessage();
     }
 }
