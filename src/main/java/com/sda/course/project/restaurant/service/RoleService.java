@@ -20,16 +20,16 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
-    public void addRole(RoleEntity role) {
-        roleRepository.save(role);
+    public RoleEntity addRole(RoleEntity role) {
+        return roleRepository.save(role);
     }
 
     public void deleteRoleById(Integer id) {
         roleRepository.deleteById(id);
     }
 
-    public void updateRole(RoleEntity updatedRole) {
-        roleRepository.save(updatedRole);
+    public RoleEntity updateRole(RoleEntity updatedRole) {
+        return roleRepository.save(updatedRole);
     }
 
 }

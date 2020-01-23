@@ -1,12 +1,14 @@
 package com.sda.course.project.restaurant.service;
 
 import com.sda.course.project.restaurant.entity.PersonEntity;
+import com.sda.course.project.restaurant.entity.RoleEntity;
 import com.sda.course.project.restaurant.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +43,7 @@ public class PersonService {
     }
 
     public PersonEntity updatePerson(Integer id, PersonEntity updatedPerson) {
+        System.out.println(updatedPerson);
 
         return personRepository.findById(id).map(
                 p -> {
@@ -61,7 +64,9 @@ public class PersonService {
     public PersonEntity updatePersonPartially(Integer id, Map<String, Object> updates) {
         PersonEntity personToUpdate = personRepository.findById(id).orElse(null);
 
+        System.out.println(personToUpdate);
         updates.forEach((k, v) -> {
+
             Field field = ReflectionUtils.findRequiredField(PersonEntity.class, k);
             ReflectionUtils.setField(field, personToUpdate, v);
         });

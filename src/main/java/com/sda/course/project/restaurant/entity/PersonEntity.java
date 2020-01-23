@@ -3,14 +3,18 @@ package com.sda.course.project.restaurant.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.Set;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import java.util.List;
 
 
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @Entity(name = "people")
 public class PersonEntity {
@@ -19,13 +23,13 @@ public class PersonEntity {
     @Column
     private int id;
 
-    @ManyToMany
+    @OneToMany
     @JoinTable(
             name = "person_roles",
             joinColumns = {@JoinColumn(name = "person_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
-    private Set<RoleEntity> roles;
+    private List<RoleEntity> roles;
 
     @NotBlank(message = "Please provide the first name")
     @Column(name = "first_name")
@@ -41,7 +45,11 @@ public class PersonEntity {
     private String email;
 
     @Column
-    @NotBlank(message = "Please provide a phone number")
-    @Min(7)
+    @Min(message = "Phone number must be at least 7 characters", value = 7)
     private long phone;
+
+
+    public void setRoles(List<RoleEntity> roles) {
+        this.roles = roles;
+    }
 }

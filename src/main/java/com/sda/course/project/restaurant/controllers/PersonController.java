@@ -67,7 +67,7 @@ public class PersonController {
 
     @PutMapping(value = "/{id}")
     public @ResponseBody
-    PersonEntity updatePerson(@PathVariable @Min(1) Integer id, @Valid PersonEntity updatedPerson) {
+    PersonEntity updatePerson(@PathVariable @Min(1) Integer id, @RequestBody @Valid PersonEntity updatedPerson) {
         return personService.updatePerson(id, updatedPerson);
     }
 
