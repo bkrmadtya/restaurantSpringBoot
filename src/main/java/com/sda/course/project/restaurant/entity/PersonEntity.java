@@ -27,21 +27,21 @@ public class PersonEntity {
     )
     private Set<RoleEntity> roles;
 
-    @NotEmpty(message = "Please provide the first name")
+    @NotBlank(message = "Please provide the first name")
     @Column(name = "first_name")
     private String firstName;
 
-    @NotEmpty(message = "Please provide the last name")
+    @NotBlank(message = "Please provide the last name")
     @Column(name = "last_name")
     private String lastName;
 
     @Column
-    @NotEmpty(message = "Please provide the email")
+    @NotBlank(message = "Please provide the email")
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
 
     @Column
-    @NotEmpty(message = "Please provide a phone number")
+    @NotBlank(message = "Please provide a phone number")
     @Min(7)
     private long phone;
 }

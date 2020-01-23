@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Setter
 @Getter
@@ -18,6 +18,6 @@ public class RoleEntity {
     private int id;
 
     @Column
-    @NotNull
+    @NotBlank(message = "Please enter the role name")
     private String name;
 }
