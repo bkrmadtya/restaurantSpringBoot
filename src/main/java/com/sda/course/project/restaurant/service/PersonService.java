@@ -61,15 +61,27 @@ public class PersonService {
         });
     }
 
-    public PersonEntity updatePersonPartially(Integer id, Map<String, Object> updates) {
+    public PersonEntity updatePersonPartially(Integer id, PersonEntity partialPerson) {
         PersonEntity personToUpdate = personRepository.findById(id).orElse(null);
 
-        System.out.println(personToUpdate);
-        updates.forEach((k, v) -> {
+        if(partialPerson.getFirstName() != null){
+            personToUpdate.setFirstName(partialPerson.getFirstName());
+        } else if(partialPerson.getLastName() != null) {
+            personToUpdate.setLastName(partialPerson.getLastName());
+        } else if(partialPerson.getPhone() > 7) {
+            personToUpdate.setPhone(partialPerson.getPhone());
+        } else if(partialPerson.getEmail() != null){
+            personToUpdate.setEmail(partialPerson.getEmail());
+        } else if(partialPerson.getRoles() != null){
+            personToUpdate.setRoles(partialPerson.getRoles());
+        }
 
-            Field field = ReflectionUtils.findRequiredField(PersonEntity.class, k);
-            ReflectionUtils.setField(field, personToUpdate, v);
-        });
+
+
+//        updates.forEach((k, v) -> {
+//            Field field = ReflectionUtils.findRequiredField(PersonEntity.class, k);
+//            ReflectionUtils.setField(field, personToUpdate, v);
+//        });
 
         return personRepository.save(personToUpdate);
     }

@@ -13,7 +13,6 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Validated
@@ -73,8 +72,8 @@ public class PersonController {
 
     @PatchMapping(value = "/{id}")
     public @ResponseBody
-    PersonEntity updatePersonPartially(@PathVariable @Min(1) Integer id, @RequestBody @Valid Map<String, Object> updates) {
-        return personService.updatePersonPartially(id, updates);
+    PersonEntity updatePersonPartially(@PathVariable @Min(1) Integer id, @RequestBody PersonEntity updatedPerson) {
+        return personService.updatePersonPartially(id, updatedPerson);
     }
 
     @DeleteMapping(value = "/{id}")
