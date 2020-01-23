@@ -2,6 +2,7 @@ package com.sda.course.project.restaurant.controllers;
 
 import com.sda.course.project.restaurant.entity.MealEntity;
 import com.sda.course.project.restaurant.service.MealService;
+import com.sda.course.project.restaurant.validation.customExceptions.MealNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,12 @@ public class MealController {
     public @ResponseBody
     List<MealEntity> getAllMeals(){
         return mealService.getAllMeals();
+    }
+
+    @GetMapping("/{id}")
+    public @ResponseBody
+    MealEntity getMealById(@PathVariable @Min(1) Integer id) {
+        return mealService.getById(id).orElseThrow(() -> new MealNotFoundException(id));
     }
 
     @PostMapping

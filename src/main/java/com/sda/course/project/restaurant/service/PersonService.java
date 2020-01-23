@@ -11,13 +11,14 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    public PersonEntity createPerson(PersonEntity newPerson) {
+    public PersonEntity addPerson(PersonEntity newPerson) {
         return personRepository.save(newPerson);
     }
 
@@ -25,17 +26,16 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    public PersonEntity getByFirstName(String name) {
+    public Optional<PersonEntity> getByFirstName(String name) {
         return personRepository.findByFirstName(name);
     }
 
-    public PersonEntity getByEmail(String email) {
+    public Optional<PersonEntity> getByEmail(String email) {
         return personRepository.findByEmail(email);
     }
 
-    // return optional of PersonEntity
-    public PersonEntity getById(Integer id) {
-        return personRepository.findById(id).orElse(null);
+    public Optional<PersonEntity> getById(Integer id) {
+        return personRepository.findById(id);
     }
 
     public List<PersonEntity> getByRole(String role) {
@@ -43,8 +43,6 @@ public class PersonService {
     }
 
     public PersonEntity updatePerson(Integer id, PersonEntity updatedPerson) {
-        System.out.println(updatedPerson);
-
         return personRepository.findById(id).map(
                 p -> {
                     p.setFirstName(updatedPerson.getFirstName());
@@ -61,41 +59,47 @@ public class PersonService {
         });
     }
 
-    public PersonEntity updatePersonPartially(Integer id, PersonEntity partialPerson) {
-        PersonEntity personToUpdate = personRepository.findById(id).orElse(null);
-
-        if(partialPerson.getFirstName() != null){
-            personToUpdate.setFirstName(partialPerson.getFirstName());
-        } else if(partialPerson.getLastName() != null) {
-            personToUpdate.setLastName(partialPerson.getLastName());
-        } else if(partialPerson.getPhone() > 7) {
-            personToUpdate.setPhone(partialPerson.getPhone());
-        } else if(partialPerson.getEmail() != null){
-            personToUpdate.setEmail(partialPerson.getEmail());
-        } else if(partialPerson.getRoles() != null){
-            personToUpdate.setRoles(partialPerson.getRoles());
-        }
-
-
+    public Optional<PersonEntity> updatePersonPartially(Integer id, PersonEntity partialPerson) {
+        return personRepository.findById(id)
+                .map( p -> {
+                    if (partialPerson.getFirstName() != null) {
+                        p.setFirstName(partialPerson.getFirstName());
+                    } else if (partialPerson.getLastName() != null) {
+                        p.setLastName(partialPerson.getLastName());
+                    } else if (partialPerson.getPhone() > 7) {
+                        p.setPhone(partialPerson.getPhone());
+                    } else if (partialPerson.getEmail() != null) {
+                        p.setEmail(partialPerson.getEmail());
+                    } else if (partialPerson.getRoles() != null) {
+                        p.setRoles(partialPerson.getRoles());
+                    }
+                    return personRepository.save(p);
+                });
 
 //        updates.forEach((k, v) -> {
 //            Field field = ReflectionUtils.findRequiredField(PersonEntity.class, k);
 //            ReflectionUtils.setField(field, personToUpdate, v);
 //        });
 
-        return personRepository.save(personToUpdate);
     }
 
-    public void deletePersonById(Integer id) {
-        PersonEntity personToDelete = personRepository.findById(id).orElse(null);
-        personRepository.deleteById(id);
+    public Optional<PersonEntity> deletePersonById(Integer id) {
+        Optional<PersonEntity> personToDelete = personRepository.findById(id);
+
+        if(personToDelete.isPresent()){
+            personRepository.deleteById(id);
+        }
+
+        return personToDelete;
     }
 
-    public void deletePersonByEmail(String email) {
-        System.out.println(email);
-        PersonEntity personToDelete = personRepository.findByEmail(email);
+    public Optional<PersonEntity> deletePersonByEmail(String email) {
+        Optional<PersonEntity> personToDelete = personRepository.findByEmail(email);
 
-        System.out.println(personToDelete);
-        personRepository.delete(personToDelete);
+        if(personToDelete.isPresent()){
+            personRepository.deleteByEmail(email);
+        }
+
+        return personToDelete;
     }
 }

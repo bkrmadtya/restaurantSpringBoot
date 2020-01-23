@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -17,7 +19,6 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -29,9 +30,16 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     // Error handler for validating path variables and request params
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    public void constraintViolationException(HttpServletResponse response) throws IOException {
+//        response.sendError(HttpStatus.BAD_REQUEST.value());
+//    }
+
     @ExceptionHandler(ConstraintViolationException.class)
-    public void constraintViolationException(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value());
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    String handleConstraintViolationException(ConstraintViolationException e) {
+        return "Not valid due to validation error: " + e.getMessage();
     }
 
     // Error handler for @Valid

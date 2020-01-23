@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderDetailService {
@@ -16,20 +17,37 @@ public class OrderDetailService {
         return orderDetailRepository.findAll();
     }
 
-    public OrderDetailEntity getOrderMealById(Integer id) {
-        return orderDetailRepository.findById(id).orElse(null);
+    public Optional<OrderDetailEntity> getOrderMealById(Integer id) {
+        return orderDetailRepository.findById(id);
     }
 
-    public void addOrderMeal(OrderDetailEntity orderDetail) {
-        orderDetailRepository.save(orderDetail);
+    public OrderDetailEntity addOrderMeal(OrderDetailEntity orderDetail) {
+        return orderDetailRepository.save(orderDetail);
     }
 
-    public void deleteOrderMealById(Integer id) {
-        orderDetailRepository.deleteById(id);
+    public Optional<OrderDetailEntity> deleteOrderMealById(Integer id) {
+        Optional<OrderDetailEntity> orderDetailToDelete = orderDetailRepository.findById(id);
+
+        if(orderDetailToDelete.isPresent()){
+            orderDetailRepository.deleteById(id);
+        }
+
+        return orderDetailToDelete;
     }
 
-    public void updateOrderMeal(OrderDetailEntity updatedOrderDetail) {
-        orderDetailRepository.save(updatedOrderDetail);
+    public OrderDetailEntity updateOrderMeal(Integer id, OrderDetailEntity updatedOrderDetail) {
+        return orderDetailRepository.findById(id)
+                .map(od -> {
+                    od.setMeal(updatedOrderDetail.getMeal());
+                    od.setOrder(updatedOrderDetail.getOrder());
+                    od.setPrice(updatedOrderDetail.getPrice());
+                    od.setQuantity(updatedOrderDetail.getQuantity());
+
+                    return orderDetailRepository.save(od);
+                }).orElseGet(() -> {
+                    updatedOrderDetail.setId(id);
+                    return orderDetailRepository.save(updatedOrderDetail);
+                });
     }
 
 }
