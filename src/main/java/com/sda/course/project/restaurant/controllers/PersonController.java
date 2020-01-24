@@ -10,12 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Validated
@@ -79,7 +76,7 @@ public class PersonController {
     @PatchMapping(value = "/{id}")
     public @ResponseBody
     PersonEntity updatePersonPartially(@PathVariable @Min(1) Integer id, @RequestBody PersonEntity updatedPerson) {
-        return personService.getById(id)
+        return personService.updatePersonPartially(id, updatedPerson)
                 .orElseThrow(() -> new PersonNotFoundException(id));
     }
 

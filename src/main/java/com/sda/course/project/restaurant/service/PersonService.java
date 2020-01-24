@@ -6,6 +6,7 @@ import com.sda.course.project.restaurant.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
+import sun.tools.tree.BooleanExpression;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -40,6 +41,11 @@ public class PersonService {
 
     public List<PersonEntity> getByRole(String role) {
         return personRepository.findByRolesName(role);
+    }
+
+    public List<PersonEntity> getTopTenCustomer(){
+        QPersonEntity person = QPersonEntity.person;
+
     }
 
     public PersonEntity updatePerson(Integer id, PersonEntity updatedPerson) {
