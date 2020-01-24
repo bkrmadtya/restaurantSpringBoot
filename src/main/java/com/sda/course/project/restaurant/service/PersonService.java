@@ -6,7 +6,6 @@ import com.sda.course.project.restaurant.entity.QOrderEntity;
 import com.sda.course.project.restaurant.entity.QPersonEntity;
 import com.sda.course.project.restaurant.repository.PersonRepository;
 
-import javafx.beans.binding.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
