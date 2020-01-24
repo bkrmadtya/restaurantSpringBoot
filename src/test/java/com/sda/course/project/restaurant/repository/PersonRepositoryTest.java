@@ -33,7 +33,7 @@ class PersonRepositoryTest {
         entityManager.flush();
 
         // when
-        PersonEntity found = personRepository.findByFirstName(bikram.getFirstName());
+        PersonEntity found = personRepository.findByFirstName(bikram.getFirstName()).orElse(null);
 
         // then
         assert (found.getFirstName()).equals(bikram.getFirstName());

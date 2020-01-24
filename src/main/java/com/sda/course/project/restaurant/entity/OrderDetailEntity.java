@@ -17,7 +17,7 @@ public class OrderDetailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
@@ -29,9 +29,9 @@ public class OrderDetailEntity {
 
     @Min(1)
     @Column
-    private int quantity;
+    private Integer quantity;
 
     @Min(5)
     @Column
-    private int price;
+    private Integer price;
 }

@@ -27,7 +27,7 @@ public class OrderEntity {
 
     @Min(5)
     @Column(name = "total_price")
-    private int totalPrice;
+    private Integer totalPrice;
 
     @CreatedDate
     @Column(name = "date_ordered")

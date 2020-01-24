@@ -16,7 +16,6 @@ public class RoleService {
     public Optional<RoleEntity> getById(Integer id) {
         return roleRepository.findById(id);
     }
-
     public List<RoleEntity> getAllRoles() {
         return roleRepository.findAll();
     }

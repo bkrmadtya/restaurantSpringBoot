@@ -35,9 +35,9 @@ public class OrderService {
 //        orderRepository.findAll();
     }
 
-    public OrderEntity addOrder(OrderEntity order) {
-        order.setDate(new Date());
-        return orderRepository.save(order);
+    public OrderEntity addOrder(OrderEntity newOrder) {
+        newOrder.setDate(new Date());
+        return orderRepository.save(newOrder);
     }
 
     public Optional<OrderEntity> deleteOrderById(Integer id) {
@@ -46,10 +46,21 @@ public class OrderService {
         if (orderToDelete.isPresent()) {
             orderRepository.deleteById(id);
         }
+
         return orderToDelete;
     }
 
-    public void updateOrder(OrderEntity updatedOrder) {
-        orderRepository.save(updatedOrder);
+    public OrderEntity updateOrder(Integer id, OrderEntity updatedOrder) {
+        return orderRepository.findById(id)
+                .map(o -> {
+                    o.setDate(updatedOrder.getDate());
+                    o.setPerson(updatedOrder.getPerson());
+                    o.setTotalPrice(updatedOrder.getTotalPrice());
+
+                    return orderRepository.save(o);
+                }).orElseGet(() -> {
+                    updatedOrder.setOrderId(id);
+                    return orderRepository.save(updatedOrder);
+                });
     }
 }

@@ -22,7 +22,7 @@ USE `restaurant` ;
 create TABLE IF NOT EXISTS `restaurant`.`meals` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `price` INT(11) NOT NULL,
+  `unit_price` INT(11) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4

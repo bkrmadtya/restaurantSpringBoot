@@ -18,13 +18,13 @@ public class MealEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private int id;
+    private Integer id;
 
     @NotBlank(message = "Please provide the meal name")
-    @Column(name = "meal_name")
+    @Column
     private String name;
 
     @Min(5)
     @Column(name = "unit_price")
-    private int unitPrice;
+    private Integer unitPrice;
 }

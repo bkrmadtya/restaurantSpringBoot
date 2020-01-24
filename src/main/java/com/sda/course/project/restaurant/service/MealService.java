@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MealService {
@@ -16,20 +17,33 @@ public class MealService {
         return mealRepository.findAll();
     }
 
-    public MealEntity getById(Integer id) {
-        return mealRepository.findById(id).orElse(null);
+    public Optional<MealEntity> getById(Integer id) {
+        return mealRepository.findById(id);
     }
 
-    public void addMeal(MealEntity meal) {
-        mealRepository.save(meal);
+    public MealEntity addMeal(MealEntity meal) {
+        return mealRepository.save(meal);
     }
 
-    public void deleteMealById(Integer id) {
-        mealRepository.deleteById(id);
+    public Optional<MealEntity> deleteMealById(Integer id) {
+        Optional<MealEntity> mealToDelete = mealRepository.findById(id);
+
+        if(mealToDelete.isPresent()){
+            mealRepository.deleteById(id);
+        }
+        return mealToDelete;
     }
 
-    public void updateMeal(MealEntity updatedMeal){
-        mealRepository.save(updatedMeal);
+    public MealEntity updateMeal(Integer id, MealEntity updatedMeal){
+        return mealRepository.findById(id).map( m -> {
+            m.setName(updatedMeal.getName());
+            m.setUnitPrice(updatedMeal.getUnitPrice());
+
+            return mealRepository.save(m);
+        }).orElseGet(() -> {
+            updatedMeal.setId(id);
+            return mealRepository.save(updatedMeal);
+        });
     }
 
 
