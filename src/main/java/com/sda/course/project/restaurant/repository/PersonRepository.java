@@ -2,6 +2,7 @@ package com.sda.course.project.restaurant.repository;
 
 import com.sda.course.project.restaurant.entity.PersonEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Integer> {
 
     Optional<PersonEntity> findByEmail(String email);
 
-    void deleteByEmail(String email);
+    Optional<PersonEntity> deleteByEmail(String email);
 }

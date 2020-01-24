@@ -1,20 +1,23 @@
 package com.sda.course.project.restaurant.service;
 
 import com.sda.course.project.restaurant.entity.PersonEntity;
-import com.sda.course.project.restaurant.entity.RoleEntity;
 import com.sda.course.project.restaurant.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class PersonService {
+
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private PersonRepository personRepository;
 
@@ -40,6 +43,10 @@ public class PersonService {
 
     public List<PersonEntity> getByRole(String role) {
         return personRepository.findByRolesName(role);
+    }
+
+    public List<PersonEntity> getTopTenCustomers(){
+        final JPAQuery<PersonEntity> query = new J
     }
 
     public PersonEntity updatePerson(Integer id, PersonEntity updatedPerson) {

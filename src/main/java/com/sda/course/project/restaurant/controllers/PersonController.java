@@ -10,17 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Validated
 @RequestMapping(value = "/persons")
 public class PersonController {
+
 
     @Autowired
     private PersonService personService;
@@ -42,7 +40,7 @@ public class PersonController {
     public @ResponseBody
     PersonEntity getPersonByEmail(@PathVariable String email) {
         return personService.getByEmail(email)
-                .orElseThrow(() -> new PersonNotFoundException(null));
+                .orElseThrow(() -> new PersonNotFoundException(email));
     }
 
     @GetMapping(value = "/customers")
@@ -62,6 +60,12 @@ public class PersonController {
     PersonEntity getCustomerDetails(@PathVariable @Min(1) Integer customerId) {
         return personService.getById(customerId)
                 .orElseThrow(() -> new PersonNotFoundException(customerId));
+    }
+
+    @GetMapping("/customers/topten")
+    public @ResponseBody
+    List<PersonEntity> getTopTenCustomers(){
+        return null;
     }
 
     @PostMapping
@@ -92,8 +96,11 @@ public class PersonController {
     }
 
     @DeleteMapping
-    public void deletePersonByEmail(@RequestParam String email) {
-        personService.deletePersonByEmail(email);
+    public ResponseEntity deletePersonByEmail(@RequestParam String email) {
+        personService.deletePersonByEmail(email)
+                .orElseThrow(() -> new PersonNotFoundException(email));
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 }
