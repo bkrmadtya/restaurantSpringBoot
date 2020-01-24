@@ -65,7 +65,7 @@ public class PersonController {
     @GetMapping("/customers/topten")
     public @ResponseBody
     List<PersonEntity> getTopTenCustomers(){
-        return null;
+        return personService.getTopTenCustomer();
     }
 
     @PostMapping

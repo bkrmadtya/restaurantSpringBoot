@@ -1,14 +1,17 @@
 package com.sda.course.project.restaurant.service;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import com.sda.course.project.restaurant.entity.PersonEntity;
+import com.sda.course.project.restaurant.entity.QOrderEntity;
+import com.sda.course.project.restaurant.entity.QPersonEntity;
 import com.sda.course.project.restaurant.repository.PersonRepository;
+
+import javafx.beans.binding.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +49,23 @@ public class PersonService {
     }
 
     public List<PersonEntity> getTopTenCustomer(){
-        QPersonEntity person = QPersonEntity.person;
+        QPersonEntity qPerson = QPersonEntity.personEntity;
+        QOrderEntity qOrder = QOrderEntity.orderEntity;
+
+        JPAQuery<PersonEntity> query = new JPAQuery<>(em);
+
+        return
+            query
+                .from(qOrder)
+                .join(qOrder.person, qPerson)
+                .on(qPerson.id.eq(qOrder.person.id))
+                .fetch();
+
+//        return query
+//            .from(qOrder)
+//            .join(qOrder.person, qPerson)
+//            .on(qPerson.id.eq(qOrder.person.id))
+//            .fetch();
     }
 
     public PersonEntity updatePerson(Integer id, PersonEntity updatedPerson) {

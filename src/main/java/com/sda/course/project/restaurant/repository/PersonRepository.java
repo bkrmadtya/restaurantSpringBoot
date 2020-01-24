@@ -12,8 +12,6 @@ import java.util.Optional;
 @Repository
 public interface PersonRepository extends JpaRepository<PersonEntity, Integer>, QuerydslPredicateExecutor<PersonEntity> {
 
-    List<PersonEntity> findTopTenCustomer();
-
     List<PersonEntity> findByRolesName(String name);
 
     Optional<PersonEntity> findByFirstName(String name);
