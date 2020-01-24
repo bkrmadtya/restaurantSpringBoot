@@ -2,12 +2,12 @@ package com.sda.course.project.restaurant.controllers;
 
 import com.sda.course.project.restaurant.entity.RoleEntity;
 import com.sda.course.project.restaurant.service.RoleService;
+import com.sda.course.project.restaurant.validation.customExceptions.RoleNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.relation.Role;
-import javax.management.relation.RoleNotFoundException;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -25,7 +25,7 @@ public class RoleController {
 
     @GetMapping("/{id}")
     public @ResponseBody
-    RoleEntity getRoleById(@PathVariable Integer id){
+    RoleEntity getRoleById(@PathVariable @Min(1) Integer id) {
         return roleService.getById(id)
                 .orElseThrow(() -> new RoleNotFoundException(id));
     }
@@ -38,7 +38,13 @@ public class RoleController {
 
     @PutMapping("/{id}")
     public @ResponseBody
-    RoleEntity updateRole(@PathVariable Integer id, @RequestBody @Valid RoleEntity updatedRole){
+    RoleEntity updateRole(@PathVariable @Min(1) Integer id, @RequestBody @Valid RoleEntity updatedRole) {
         return roleService.updateRole(id, updatedRole);
+    }
+
+    @DeleteMapping("/{id}")
+    public @ResponseBody
+    RoleEntity deleteRole(@PathVariable @Min(1) Integer id) {
+        return roleService.deleteRoleById(id).orElseThrow(() -> new RoleNotFoundException(id));
     }
 }

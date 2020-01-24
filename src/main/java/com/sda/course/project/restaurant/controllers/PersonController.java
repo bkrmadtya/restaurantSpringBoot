@@ -83,7 +83,7 @@ public class PersonController {
     @PatchMapping(value = "/{id}")
     public @ResponseBody
     PersonEntity updatePersonPartially(@PathVariable @Min(1) Integer id, @RequestBody PersonEntity updatedPerson) {
-        return personService.getById(id)
+        return personService.updatePersonPartially(id, updatedPerson)
                 .orElseThrow(() -> new PersonNotFoundException(id));
     }
 

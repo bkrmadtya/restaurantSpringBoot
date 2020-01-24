@@ -2,14 +2,17 @@ package com.sda.course.project.restaurant.repository;
 
 import com.sda.course.project.restaurant.entity.PersonEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
+
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PersonRepository extends JpaRepository<PersonEntity, Integer> {
+public interface PersonRepository extends JpaRepository<PersonEntity, Integer>, QuerydslPredicateExecutor<PersonEntity> {
+
+    List<PersonEntity> findTopTenCustomer();
 
     List<PersonEntity> findByRolesName(String name);
 

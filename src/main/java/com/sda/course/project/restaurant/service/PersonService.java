@@ -45,8 +45,8 @@ public class PersonService {
         return personRepository.findByRolesName(role);
     }
 
-    public List<PersonEntity> getTopTenCustomers(){
-        final JPAQuery<PersonEntity> query = new J
+    public List<PersonEntity> getTopTenCustomer(){
+        QPersonEntity person = QPersonEntity.person;
     }
 
     public PersonEntity updatePerson(Integer id, PersonEntity updatedPerson) {
