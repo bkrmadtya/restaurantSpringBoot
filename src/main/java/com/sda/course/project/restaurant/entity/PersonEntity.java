@@ -47,9 +47,4 @@ public class PersonEntity {
     @Column
     @Min(message = "Phone number must be at least 7 characters", value = 7)
     private long phone;
-
-
-    public void setRoles(List<RoleEntity> roles) {
-        this.roles = roles;
-    }
 }
