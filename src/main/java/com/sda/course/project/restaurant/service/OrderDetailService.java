@@ -13,19 +13,19 @@ public class OrderDetailService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
-    public List<OrderDetailEntity> getAllOrderMeals() {
+    public List<OrderDetailEntity> getAllOrderDetails() {
         return orderDetailRepository.findAll();
     }
 
-    public Optional<OrderDetailEntity> getOrderMealById(Integer id) {
+    public Optional<OrderDetailEntity> getOrderDetailById(Integer id) {
         return orderDetailRepository.findById(id);
     }
 
-    public OrderDetailEntity addOrderMeal(OrderDetailEntity orderDetail) {
+    public OrderDetailEntity addOrderDetail(OrderDetailEntity orderDetail) {
         return orderDetailRepository.save(orderDetail);
     }
 
-    public Optional<OrderDetailEntity> deleteOrderMealById(Integer id) {
+    public Optional<OrderDetailEntity> deleteOrderDetailById(Integer id) {
         Optional<OrderDetailEntity> orderDetailToDelete = orderDetailRepository.findById(id);
 
         if(orderDetailToDelete.isPresent()){
@@ -35,7 +35,7 @@ public class OrderDetailService {
         return orderDetailToDelete;
     }
 
-    public OrderDetailEntity updateOrderMeal(Integer id, OrderDetailEntity updatedOrderDetail) {
+    public OrderDetailEntity updateOrderDetail(Integer id, OrderDetailEntity updatedOrderDetail) {
         return orderDetailRepository.findById(id)
                 .map(od -> {
                     od.setMeal(updatedOrderDetail.getMeal());
