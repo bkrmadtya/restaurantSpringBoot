@@ -29,7 +29,7 @@ public class OrderController {
     OrderEntity getOrderById(@PathVariable Integer id) {
         return orderService.getOrderById(id).orElseThrow(() -> new OrderNotFoundException(id));
     }
-
+//TODO: method name should be getAllOrdersByPersonId as it mean by person object now
     @GetMapping(value = "/person/{personId}")
     List<OrderEntity> getAllOrdersByPerson(@PathVariable @Min(1) Integer personId) {
         return orderService.getOrdersByPerson(personId);
@@ -44,7 +44,7 @@ public class OrderController {
     List<OrderEntity> getHighestOrders() {
         return orderService.getTopTenUsersByOrder();
     }
-
+//TODO: what is this comment?
     // custom exceptions with exception handlers from Spring
     @PostMapping
     public @ResponseBody

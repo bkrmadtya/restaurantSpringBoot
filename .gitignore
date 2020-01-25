@@ -1,3 +1,7 @@
+#TODO
+# .gitignore is great but you missed adding
+#  mvnw, mvnw.cmd and myhints.md
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

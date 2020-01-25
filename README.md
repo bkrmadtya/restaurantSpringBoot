@@ -1,3 +1,17 @@
+//TODO
+* its good idea but, usually we put in readme file couple of points
+* Overview
+* Getting it to work
+* Requirements
+* Build the app
+* Run the spring app
+* Run Tests and generate test-coverage report
+* Swagger UI
+* Feature work
+* Technical comments
+
+//
+
 Spring Boot Application (Restaurant)
 -
 

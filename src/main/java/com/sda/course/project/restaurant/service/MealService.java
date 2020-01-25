@@ -26,15 +26,21 @@ public class MealService {
     }
 
     public Optional<MealEntity> deleteMealById(Integer id) {
+        //TODO: if id is null it will throw exception try to defense your code
         Optional<MealEntity> mealToDelete = mealRepository.findById(id);
 
         if(mealToDelete.isPresent()){
             mealRepository.deleteById(id);
         }
+        //TODO: you can use and no need for return in delete
+        mealRepository.findById(id).ifPresent(
+                mealEntity -> mealRepository.deleteById(id)
+        );
         return mealToDelete;
     }
 
     public MealEntity updateMeal(Integer id, MealEntity updatedMeal){
+        //TODO: if you didn't find the meal user want to update you should throw exception
         return mealRepository.findById(id).map( m -> {
             m.setName(updatedMeal.getName());
             m.setUnitPrice(updatedMeal.getUnitPrice());
